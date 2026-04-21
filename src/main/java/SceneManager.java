@@ -1,4 +1,5 @@
 import javafx.stage.Stage;
+import javafx.scene.Scene;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ public class SceneManager {
     private static SceneManager instance;
 
     private final Stage stage;
-    private final Map cache = new EnumMap<>(SceneType.class);
+    private final Map<SceneType, Scene> cache = new EnumMap<>();
 
     private SceneManager(Stage stage) {
         this.stage = stage;
@@ -24,5 +25,22 @@ public class SceneManager {
                 throw new IllegalStateException("SceneManager not initialised");
         }
         return instance;
+    }
+
+    /**
+     * Navigates to a Scene, if a scene of that type
+     * is stored in the cache, then it uses the scene
+     * from the cache. Otherwise, it creates a new scene.
+     * @param type The type of scene to be navigated to.
+     */
+    public void navigateTo(SceneType type) {
+        Scene scene = null;
+        if (cache.containsKey(type)) {
+            scene = cache.get(type);
+        }
+        else {
+            scene = SceneFactory.create(type, stage);
+        }
+        stage.setScene(scene);
     }
 }
