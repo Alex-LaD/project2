@@ -8,7 +8,7 @@ public class SceneManager {
     private static SceneManager instance;
 
     private final Stage stage;
-    private final Map<SceneType, Scene> cache = new EnumMap<>();
+    private final Map<SceneType, Scene> cache = new EnumMap<>(SceneType.class);
 
     private SceneManager(Stage stage) {
         this.stage = stage;
