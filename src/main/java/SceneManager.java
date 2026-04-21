@@ -43,4 +43,28 @@ public class SceneManager {
         }
         stage.setScene(scene);
     }
+
+    /**
+     * Stores a scene into the cache.
+     * @param type The type of scene
+     * @param scene A scene
+     */
+    public void cache(SceneType type, Scene scene) {
+        cache.put(type,scene);
+    }
+
+    /**
+     * Removes a scene from the cache
+     * @param type The scene type to be removed
+     */
+    public void uncache(SceneType type) {
+        cache.remove(type);
+    }
+
+    /**
+     * Removes all scenes from the cache.
+     */
+    public void uncacheAll(){
+        cache.clear();
+    }
 }
