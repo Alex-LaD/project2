@@ -1,4 +1,4 @@
-package src.main.java;
+package com.example.projet2;
 
 public class User {
     private int id;

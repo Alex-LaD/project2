@@ -1,3 +1,5 @@
+package com.example.projet2;
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import java.util.EnumMap;
@@ -22,7 +24,7 @@ public class SceneManager {
 
     public static SceneManager getInstance() {
         if (instance == null) {
-                throw new IllegalStateException("SceneManager not initialised");
+                throw new IllegalStateException("com.example.projet2.SceneManager not initialised");
         }
         return instance;
     }
