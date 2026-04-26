@@ -84,7 +84,7 @@ class SceneManagerTest {
 
     @Test
     @DisplayName("Can navigate to different scenes using the cache")
-    void cacheAndUncach() throws InterruptedException {
+    void cacheAndUncache() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Throwable> error = new AtomicReference<>();
 
