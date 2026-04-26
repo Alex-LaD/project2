@@ -84,25 +84,33 @@ class SceneManagerTest {
 
     @Test
     @DisplayName("Can navigate to different scenes using the cache")
-    void navigateUsingCache() throws InterruptedException {
+    void cacheAndUncach() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Throwable> error = new AtomicReference<>();
 
         Platform.runLater(() -> {
             try {
                 assertNotNull(stage.getScene());
+
                 Scene loginScene = new Scene(new VBox());
                 Scene signupScene = new Scene(new VBox());
+
                 sceneManager.cache(SceneType.SIGNUP, signupScene);
                 sceneManager.navigateTo(SceneType.SIGNUP);
                 assertEquals(signupScene, stage.getScene());
+
                 sceneManager.navigateTo(SceneType.LOGIN);
                 assertNotEquals(loginScene, stage.getScene());
+
+                sceneManager.uncache(SceneType.SIGNUP);
+                sceneManager.navigateTo(SceneType.SIGNUP);
+                assertNotEquals(signupScene, stage.getScene());
+
             } catch (Throwable t) {
                 error.set(t);
             } finally {
-            latch.countDown();
-        }
+                latch.countDown();
+            }
         });
 
         if (!latch.await(10, TimeUnit.SECONDS)) {
