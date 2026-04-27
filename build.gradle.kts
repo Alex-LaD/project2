@@ -35,6 +35,7 @@ javafx {
 }
 
 dependencies {
+    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
