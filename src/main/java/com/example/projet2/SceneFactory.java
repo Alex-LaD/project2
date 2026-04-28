@@ -1,5 +1,6 @@
 package com.example.projet2;
 
+import com.example.projet2.sceneControllers.LoginController;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -9,7 +10,7 @@ public class SceneFactory {
 
     public static Scene create(SceneType type, Stage stage) {
         return switch (type) {
-            case LOGIN -> buildLoginScene(stage);
+            case LOGIN -> new LoginController().buildScene();
             case SIGNUP -> buildSignupScene(stage);
             case DASHBOARD -> buildDashboardScene(stage);
         };

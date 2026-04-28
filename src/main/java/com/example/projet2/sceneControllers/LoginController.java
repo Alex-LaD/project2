@@ -30,9 +30,11 @@ public class LoginController {
         // Add Buttons to HBox
         HBox hBox = new HBox(login, signup);
         // Add TextFields and HBox to VBox
-        VBox vBox = new VBox(usernameField, passwordField, hBox);
+        VBox vBox = new VBox(usernamePrompt, usernameField,
+                             passwordPrompt, passwordField,
+                             hBox);
         // Add VBox to a new Scene
-        scene = new Scene(vBox);
+        scene = new Scene(vBox, 320, 240);
 
         // Logic for log in
         login.setOnAction(e -> login(usernameField.getText(), passwordField.getText()));
@@ -75,6 +77,8 @@ public class LoginController {
     }
 
     private void handleIncorrectUserInformation() {
-
+        SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.uncache(SceneType.LOGIN);
+        sceneManager.navigateTo(SceneType.LOGIN);
     }
 }
