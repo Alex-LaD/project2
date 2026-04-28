@@ -16,9 +16,6 @@ public class SceneFactory {
         };
     }
 
-    private static Scene buildLoginScene(Stage stage) {
-        return null;
-    }
     private static Scene buildSignupScene(Stage stage) { /* TODO */ return new Scene(new VBox());}
     private static Scene buildDashboardScene(Stage stage) { /* TODO */ return new Scene(new VBox());}
 }

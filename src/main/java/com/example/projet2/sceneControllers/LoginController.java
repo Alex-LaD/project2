@@ -4,19 +4,28 @@ import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 import com.example.projet2.User;
 import com.example.projet2.repository.UserRepository;
+
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 public class LoginController {
 
     private Scene scene;
-    private final Text errorMessage = new Text("Invalid Username or Password");
+    private final Label errorMessage = new Label("Invalid Username or Password");
+
+    // Window dimensions in pixels
+    private static final int SCENE_WIDTH = 400;
+    private static final int SCENE_HEIGHT = 300;
+
+    private static final double BUTTON_SPACING = 40;
+    private static final double ROOT_SPACING = 25;
 
     /**
      * Builds scene for login page.
@@ -24,39 +33,53 @@ public class LoginController {
      */
     public Scene buildScene() {
 
-        // Create error message for invalid username/password
-        errorMessage.setFill(Color.RED);
+        // Configure error message for invalid username/password
+        errorMessage.setTextFill(Color.RED);
         errorMessage.setUnderline(true);
+        errorMessage.setAlignment(Pos.CENTER);
 
         // Hide error message for now
         errorMessage.setVisible(false);
 
-        // Create Text and TextFields;
-        Text usernamePrompt = new Text("Enter Username");
+        // Create Username label and field;
+        Label usernamePrompt = new Label("Enter Username");
         TextField usernameField = new TextField();
-        Text passwordPrompt = new Text("Enter Password");
+        usernameField.setMaxWidth(SCENE_WIDTH * 0.5);
+        VBox usernameBox = new VBox(usernamePrompt, usernameField);
+        usernameBox.setAlignment(Pos.CENTER);
+
+        // Create password label and field
+        Label passwordPrompt = new Label("Enter Password");
         PasswordField passwordField = new PasswordField();
+        passwordField.setMaxWidth(SCENE_WIDTH * 0.5);
+        VBox passwordBox = new VBox(passwordPrompt, passwordField);
+        passwordBox.setAlignment(Pos.CENTER);
 
         // Create Buttons
-        Button login = new Button("Login");
-        Button signup = new Button("Signup");
+        Button loginButton = new Button("Login");
+        loginButton.setPrefWidth(SCENE_WIDTH * 0.25);
+        loginButton.setStyle("-fx-background-color: #67ABFF; -fx-text-fill: white");
+        Button signupButton = new Button("Signup");
+        signupButton.setPrefWidth(SCENE_WIDTH * 0.15);
 
         // Add Buttons to HBox
-        HBox hBox = new HBox(login, signup);
+        HBox buttonBox = new HBox(loginButton, signupButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(BUTTON_SPACING);
 
         // Add TextFields and HBox to VBox
-        VBox vBox = new VBox(errorMessage, usernamePrompt,
-                             usernameField, passwordPrompt,
-                             passwordField, hBox);
+        VBox root = new VBox(errorMessage, usernameBox, passwordBox, buttonBox);
+        root.setSpacing(ROOT_SPACING);
+        root.setAlignment(Pos.CENTER);
 
         // Add VBox to a new Scene
-        scene = new Scene(vBox, 320, 240);
+        scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
 
         // Logic for log in
-        login.setOnAction(e -> login(usernameField, passwordField));
+        loginButton.setOnAction(e -> login(usernameField, passwordField));
 
         //logic for signup scene
-        signup.setOnAction(e -> navigateToSignup());
+        signupButton.setOnAction(e -> navigateToSignup());
 
         // Return Scene
         return scene;
