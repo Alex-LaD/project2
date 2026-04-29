@@ -1,5 +1,7 @@
-package com.example.projet2;
+package com.example.projet2.sceneControllers;
 
+import com.example.projet2.Transaction;
+import com.example.projet2.TransactionModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
