@@ -92,8 +92,7 @@ public class LoginController {
      */
     private void login(TextField usernameField, PasswordField passwordField) {
 
-        UserRepository userRepository = new UserRepository();
-        User user = userRepository.getUserByUsername(usernameField.getText());
+        User user = UserRepository.getUserByUsername(usernameField.getText());
 
         // Check if username and password match a user in database
         if (user != null && user.getPassword().equals(passwordField.getText())) {
@@ -120,11 +119,8 @@ public class LoginController {
         // Hide error message
         errorMessage.setVisible(false);
 
-        // Get Scene Manager
-        SceneManager sceneManager = SceneManager.getInstance();
-
         // Navigate to signup scene
-        sceneManager.navigateTo(SceneType.SIGNUP);
+        SceneManager.getInstance().navigateTo(SceneType.SIGNUP);
     }
 
     /**
