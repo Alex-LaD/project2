@@ -4,6 +4,7 @@ import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 import com.example.projet2.User;
 import com.example.projet2.repository.UserRepository;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,30 +25,40 @@ public class SignupController {
                                                 "Password needs at least one special character\n" +
                                                 "Password does not match confirm password";
 
-    private static final ArrayList<Label> errorList = new ArrayList<>();
-    private static final VBox errorBox = new VBox();
+    private final ArrayList<Label> errorList = new ArrayList<>();
+    private final VBox errorBox = new VBox();
 
     private static final int SCENE_WIDTH = 400;
-    private static final int SCENE_HEIGHT = 300;
+    private static final int SCENE_HEIGHT = 350;
+
+    private static final int ROOT_SPACING = 15;
+    private static final int BUTTON_SPACING = 40;
 
     public Scene buildScene() {
 
         generateErrors();
+        errorBox.setAlignment(Pos.CENTER);
 
         // Add in username field and text
         Label username = new Label("Enter Username");
         TextField usernameField = new TextField();
+        usernameField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox usernameBox = new VBox(username,usernameField);
+        usernameBox.setAlignment(Pos.CENTER);
 
         // Add in password field and text
         Label password = new Label("Enter Password");
         PasswordField passwordField = new PasswordField();
+        passwordField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox passwordBox = new VBox(password,passwordField);
+        passwordBox.setAlignment(Pos.CENTER);
 
         // Add in confirm field and text
         Label confirm = new Label("Confirm Password");
         PasswordField confirmField = new PasswordField();
+        confirmField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox confirmBox = new VBox(confirm,confirmField);
+        confirmBox.setAlignment(Pos.CENTER);
 
         // Create signup button
         Button signup = new Button("Sign up");
@@ -57,9 +68,13 @@ public class SignupController {
 
         // Store buttons in HBox
         HBox buttonBox = new HBox(signup,rtrn);
+        buttonBox.setSpacing(BUTTON_SPACING);
+        buttonBox.setAlignment(Pos.CENTER);
 
         // Store components in VBox
         VBox root = new VBox(usernameBox,passwordBox,confirmBox,errorBox,buttonBox);
+        root.setSpacing(ROOT_SPACING);
+        //root.setAlignment(Pos.CENTER);
 
         // Create Scene with VBox as root
         Scene scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
@@ -104,13 +119,13 @@ public class SignupController {
         // username must not exist in database
         failConditions.add(UserRepository.getUserByUsername(username) != null);
         // username must be at least 3 characters
-        failConditions.add(username.length() < 3);
+        failConditions.add(username.replaceAll("\\s+", "").length() < 3);
         // password must be at least 8 characters
-        failConditions.add(password.length() < 8);
+        failConditions.add(password.replaceAll("\\s+", "").length() < 8);
         // password must contain at least one digit
         failConditions.add(!password.matches("^.*\\d.*$"));
         // password must contain at least one special character
-        failConditions.add(!password.matches("^.*[^a-zA-z0-9 ].*$"));
+        failConditions.add(!password.matches("^.*[^a-zA-z0-9\\s]|_.*$"));
         // password and confirm must be equal
         failConditions.add(!password.equals(confirm));
 
