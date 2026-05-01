@@ -77,29 +77,54 @@ public class signupController {
         boolean isValid = checkValidity(usernameField.getText(), passwordField.getText(), confirmField.getText());
 
         // if valid:
-        // Store new user in database
+            // Store new user in database
 
         // else:
-        // show errors
+            // show errors
     }
 
     private boolean checkValidity(String username, String password, String confirm) {
         boolean isValid = true;
-        // username does not exist in database
-        // password is at least 8 characters
-        // password contains at least one digit and at least one non-alphanumerical character
-        // password and confirm are equal
+        boolean[] failConditions = new boolean[errorList.size()];
 
-        return isValid
+        // username must not exist in database
+        failConditions[0] = (UserRepository.getUserByUsername(username) != null);
+        // password must be at least 8 characters
+        failConditions[1] = (password.length() < 8);
+        // password must contain at least one digit
+        failConditions[2] = (!password.matches("^.*\\d.*$"));
+        // password contains at least one special character
+        failConditions[3] = (!password.matches("^.*^[a-zA-Z0-9].*$"));
+        // password and confirm must be equal
+        failConditions[4] = (password.equals(confirm));
+
+        for (int pointer = 0 ; pointer < errorList.size() ; pointer++) {
+            isValid = checkCondition(isValid, pointer, failConditions[pointer]);
+        }
+
+        return isValid;
     }
 
+    private boolean checkCondition(boolean isValid, int listPointer, boolean condition) {
+        if (condition) {
+            // Invalid username/password
+            isValid = false;
+
+            // Show new error
+            errorBox.getChildren().add(errorList.get(listPointer));
+        } else {
+            // Remove error message if it exists
+            errorBox.getChildren().remove(errorList.get(listPointer));
+        }
+        return isValid;
+    }
 
     private void handleReturn() {
         // navigate to login scene
         SceneManager.getInstance().navigateTo(SceneType.LOGIN);
     }
 
-    private VBox generateErrors() {
+    private void generateErrors() {
         Scanner errors = new Scanner(errorMessages);
         while (errors.hasNextLine()) {
             Label error = new Label(errors.nextLine());
