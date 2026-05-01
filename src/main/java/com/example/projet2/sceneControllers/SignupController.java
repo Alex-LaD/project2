@@ -2,6 +2,7 @@ package com.example.projet2.sceneControllers;
 
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
+import com.example.projet2.User;
 import com.example.projet2.repository.UserRepository;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,9 +15,10 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class signupController {
+public class SignupController {
 
     private static final String errorMessages = "Username already exists\n" +
+                                                "Username needs to be at least 3 characters\n" +
                                                 "Password needs to be at least 8 characters\n" +
                                                 "Password needs at least one number\n" +
                                                 "Password needs at least one special character\n" +
@@ -74,47 +76,70 @@ public class signupController {
 
     private void handleSignup(TextField usernameField, PasswordField passwordField, PasswordField confirmField) {
         // Check if valid username and password:
-        boolean isValid = checkValidity(usernameField.getText(), passwordField.getText(), confirmField.getText());
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        String confirm = confirmField.getText();
+        boolean isValid = checkValidity(username, password, confirm);
 
         // if valid:
+        if (isValid) {
             // Store new user in database
+            UserRepository.insertUser(new User(67,username, password));
 
-        // else:
-            // show errors
+            // Get scene manager
+            SceneManager sceneManager = SceneManager.getInstance();
+
+            // uncache signup
+            sceneManager.uncache(SceneType.SIGNUP);
+
+            // navigate to login
+            sceneManager.navigateTo(SceneType.LOGIN);
+        }
     }
 
     private boolean checkValidity(String username, String password, String confirm) {
         boolean isValid = true;
-        boolean[] failConditions = new boolean[errorList.size()];
+        ArrayList<Boolean> failConditions = new ArrayList();
 
         // username must not exist in database
-        failConditions[0] = (UserRepository.getUserByUsername(username) != null);
+        failConditions.add(UserRepository.getUserByUsername(username) != null);
+        // username must be at least 3 characters
+        failConditions.add(username.length() < 3);
         // password must be at least 8 characters
-        failConditions[1] = (password.length() < 8);
+        failConditions.add(password.length() < 8);
         // password must contain at least one digit
-        failConditions[2] = (!password.matches("^.*\\d.*$"));
-        // password contains at least one special character
-        failConditions[3] = (!password.matches("^.*^[a-zA-Z0-9].*$"));
+        failConditions.add(!password.matches("^.*\\d.*$"));
+        // password must contain at least one special character
+        failConditions.add(!password.matches("^.*[^a-zA-z0-9 ].*$"));
         // password and confirm must be equal
-        failConditions[4] = (password.equals(confirm));
+        failConditions.add(!password.equals(confirm));
 
+        // throw exception if failConditions and errorList are not same size
+        if (failConditions.size() != errorList.size()) {
+            throw new RuntimeException("errorList and failConditions mismatch");
+        }
+
+        // Check each condition
         for (int pointer = 0 ; pointer < errorList.size() ; pointer++) {
-            isValid = checkCondition(isValid, pointer, failConditions[pointer]);
+            isValid = checkCondition(isValid, pointer, failConditions.get(pointer));
         }
 
         return isValid;
     }
 
     private boolean checkCondition(boolean isValid, int listPointer, boolean condition) {
+        Label error = errorList.get(listPointer);
         if (condition) {
             // Invalid username/password
             isValid = false;
 
             // Show new error
-            errorBox.getChildren().add(errorList.get(listPointer));
+            if (!errorBox.getChildren().contains(error)) {
+                errorBox.getChildren().add(error);
+            }
         } else {
             // Remove error message if it exists
-            errorBox.getChildren().remove(errorList.get(listPointer));
+            errorBox.getChildren().remove(error);
         }
         return isValid;
     }
