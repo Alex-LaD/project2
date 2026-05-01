@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 
 public class LoginController {
 
-    private Scene scene;
     private final Label errorMessage = new Label("Invalid Username or Password");
 
     // Window dimensions in pixels
@@ -73,7 +72,7 @@ public class LoginController {
         root.setAlignment(Pos.CENTER);
 
         // Add VBox to a new Scene
-        scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
 
         // Logic for log in
         loginButton.setOnAction(e -> login(usernameField, passwordField));
@@ -123,9 +122,6 @@ public class LoginController {
 
         // Get Scene Manager
         SceneManager sceneManager = SceneManager.getInstance();
-
-        // Cache login scene
-        sceneManager.cache(SceneType.LOGIN, scene);
 
         // Navigate to signup scene
         sceneManager.navigateTo(SceneType.SIGNUP);
