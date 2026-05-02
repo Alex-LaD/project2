@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class UserRepository {
 
-    public void insertUser(User user) {
+    public static void insertUser(User user) {
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
 
         try (Connection conn = DatabaseManager.connect();
@@ -26,7 +26,7 @@ public class UserRepository {
         }
     }
 
-    public User getUserByUsername(String username) {
+    public static User getUserByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
 
         try (Connection conn = DatabaseManager.connect();
@@ -50,7 +50,7 @@ public class UserRepository {
         return null;
     }
 
-    public void deleteUserByUsername(String username) {
+    public static void deleteUserByUsername(String username) {
         String sql = "DELETE FROM users WHERE username = ?";
 
         try (Connection conn = DatabaseManager.connect();
@@ -64,7 +64,7 @@ public class UserRepository {
         }
     }
 
-    public void updatePassword(String username, String newPassword) {
+    public static void updatePassword(String username, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE username = ?";
 
         try (Connection conn = DatabaseManager.connect();
