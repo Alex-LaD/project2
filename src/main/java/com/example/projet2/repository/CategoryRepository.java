@@ -47,4 +47,16 @@ public class CategoryRepository {
             e.printStackTrace();
         }
     }
+
+    public static void updateCategory(String oldName, String newName) {
+        String sql = "UPDATE categories SET name = ? WHERE name = ?";
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newName);
+            pstmt.setString(2, oldName);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

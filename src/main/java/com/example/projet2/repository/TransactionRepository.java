@@ -48,4 +48,30 @@ public class TransactionRepository {
         }
         return list;
     }
+
+    public static void updateTransaction(Transaction t) {
+        String sql = "UPDATE transactions SET amount = ?, category = ?, description = ?, date = ? WHERE id = ?";
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, t.getAmount());
+            pstmt.setString(2, t.getCategory());
+            pstmt.setString(3, t.getDescription());
+            pstmt.setString(4, t.getDate().toString());
+            pstmt.setInt(5, t.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteTransaction(int id) {
+        String sql = "DELETE FROM transactions WHERE id = ?";
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
