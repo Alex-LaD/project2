@@ -1,5 +1,6 @@
 package Tests;
 
+import com.example.projet2.SceneFactory;
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 
@@ -90,21 +91,21 @@ class SceneManagerTest {
 
         Platform.runLater(() -> {
             try {
+
                 assertNotNull(stage.getScene());
 
-                Scene loginScene = new Scene(new VBox());
-                Scene signupScene = new Scene(new VBox());
+                sceneManager.navigateTo(SceneType.SIGNUP);
+                Scene signupScene = stage.getScene();
 
-                sceneManager.cache(SceneType.SIGNUP, signupScene);
+                sceneManager.navigateTo(SceneType.LOGIN);
+                Scene loginScene = stage.getScene();
+                assertNotEquals(signupScene, loginScene);
                 sceneManager.navigateTo(SceneType.SIGNUP);
                 assertEquals(signupScene, stage.getScene());
 
+                sceneManager.uncache(SceneType.LOGIN);
                 sceneManager.navigateTo(SceneType.LOGIN);
                 assertNotEquals(loginScene, stage.getScene());
-
-                sceneManager.uncache(SceneType.SIGNUP);
-                sceneManager.navigateTo(SceneType.SIGNUP);
-                assertNotEquals(signupScene, stage.getScene());
 
             } catch (Throwable t) {
                 error.set(t);
