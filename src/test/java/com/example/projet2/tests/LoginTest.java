@@ -1,0 +1,108 @@
+package com.example.projet2.tests;
+
+import com.example.projet2.SceneManager;
+import com.example.projet2.SceneType;
+import com.example.projet2.User;
+import com.example.projet2.database.DatabaseManager;
+import com.example.projet2.repository.UserRepository;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.*;
+import org.testfx.framework.junit5.ApplicationTest;
+import static org.junit.jupiter.api.Assertions.*;
+import javafx.stage.Stage;
+import org.testfx.api.FxToolkit;
+import org.testfx.api.FxRobot;
+import javafx.application.Platform;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+@DisplayName("Login Tests")
+class LoginTest extends ApplicationTest {
+
+    private static Stage stage;
+    private static SceneManager sceneManager;
+
+    @BeforeAll
+    static void bootToolkit() throws Exception{
+        stage = FxToolkit.registerPrimaryStage();
+        SceneManager.init(stage);
+        sceneManager = SceneManager.getInstance();
+    }
+
+    @BeforeEach
+    void setup() throws Exception {
+        runOnFxThreadAndWait( () -> {
+            System.setProperty("app.db.url", "jdbc:sqlite::memory");
+            // Username and Password are impossible to create naturally
+            // Won't interfere with any real users
+            UserRepository.insertUser(new User(-1, "x", "password"));
+            sceneManager.navigateTo(SceneType.LOGIN);
+            stage.show();
+        });
+    }
+
+    @AfterEach
+    void deleteUser(){
+        UserRepository.deleteUserByUsername("x");
+        sceneManager.uncacheAll();
+    }
+
+    @Test
+    @DisplayName("Test Login")
+    void loginTest() {
+        Scene loginScene = stage.getScene();
+
+        // Test Empty Username and Password
+        clickOn("#loginButton");
+        assertEquals(loginScene, stage.getScene());
+
+        // Test Incorrect Username and Password
+        clickOn("#usernameField");
+        write("No");
+        clickOn("#passwordField");
+        write("awful password 67 Skibidi Toilet Ohio Rizz Hawk Tuah TUNG TUNG TUNG");
+        clickOn("#loginButton");
+        assertEquals(loginScene, stage.getScene());
+
+        // Test correct Username and Password
+        clickOn("#usernameField");
+        write("x");
+        clickOn("#passwordField");
+        write("password");
+        clickOn("#loginButton");
+        assertNotEquals(loginScene, stage.getScene());
+    }
+
+    @Test
+    @DisplayName("Not an actual test, just trolling you")
+    void notAnActualTest() {
+        write("Pneumonoultramicroscopicsilicovolcsnoconiosis  Lake Chargoggagoggmanchauggauggagoggchaubunagungamaugg Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenu-akitanatahu Pseudopseudohypoparathyroidism Methylenedioxymethamphetamine electroencephalographically Radioimmunoelectrophoresis immunoelectrophoretically Laryngotracheobronchitis Hydrochlorofluorocarbon Counterrevolutionaries Deinstitutionalization Otorhinolaryngological Incomprehensibilities Pseudohermaphroditism psychoneuroimmunology hippopotomonstrosesquippedaliophobia");
+        assertTrue(true);
+    }
+
+    @Test
+    @DisplayName("Test sign up button works")
+    void signUpTest() {
+
+    }
+
+    private void runOnFxThreadAndWait(Runnable action) throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            try {
+                action.run();
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            throw new RuntimeException("Timed out waiting for FX thread");
+        }
+    }
+}

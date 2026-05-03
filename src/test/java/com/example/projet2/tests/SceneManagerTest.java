@@ -1,6 +1,5 @@
-package Tests;
+package com.example.projet2.tests;
 
-import com.example.projet2.SceneFactory;
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 

@@ -43,6 +43,7 @@ public class LoginController {
         // Create Username label and field;
         Label usernamePrompt = new Label("Enter Username");
         TextField usernameField = new TextField();
+        usernameField.setId("usernameField");
         usernameField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox usernameBox = new VBox(usernamePrompt, usernameField);
         usernameBox.setAlignment(Pos.CENTER);
@@ -50,15 +51,18 @@ public class LoginController {
         // Create password label and field
         Label passwordPrompt = new Label("Enter Password");
         PasswordField passwordField = new PasswordField();
+        passwordField.setId("passwordField");
         passwordField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox passwordBox = new VBox(passwordPrompt, passwordField);
         passwordBox.setAlignment(Pos.CENTER);
 
         // Create Buttons
         Button loginButton = new Button("Login");
+        loginButton.setId("loginButton");
         loginButton.setPrefWidth(SCENE_WIDTH * 0.25);
         loginButton.setStyle("-fx-background-color: #67ABFF; -fx-text-fill: white");
         Button signupButton = new Button("Signup");
+        signupButton.setId("signUpButton");
         signupButton.setPrefWidth(SCENE_WIDTH * 0.15);
 
         // Add Buttons to HBox
