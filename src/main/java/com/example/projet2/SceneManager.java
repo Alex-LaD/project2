@@ -36,12 +36,13 @@ public class SceneManager {
      * @param type The type of scene to be navigated to.
      */
     public void navigateTo(SceneType type) {
-        Scene scene = null;
+        Scene scene;
         if (cache.containsKey(type)) {
             scene = cache.get(type);
         }
         else {
             scene = SceneFactory.create(type, stage);
+            cache(type, scene);
         }
         stage.setScene(scene);
     }
@@ -51,7 +52,7 @@ public class SceneManager {
      * @param type The type of scene
      * @param scene A scene
      */
-    public void cache(SceneType type, Scene scene) {
+    private void cache(SceneType type, Scene scene) {
         cache.put(type,scene);
     }
 
