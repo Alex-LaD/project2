@@ -65,6 +65,7 @@ public class SignupController {
 
         // Create return to login button
         Button rtrn = new Button("Return to login");
+        rtrn.setId("returnButton");
 
         // Store buttons in HBox
         HBox buttonBox = new HBox(signup,rtrn);

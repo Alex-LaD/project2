@@ -87,7 +87,14 @@ class LoginTest extends ApplicationTest {
     @Test
     @DisplayName("Test sign up button works")
     void signUpTest() {
+        // Test sign up button navigates away from login scene
+        Scene loginScene = stage.getScene();
+        clickOn("#signupButton");
+        assertNotEquals(loginScene, stage.getScene());
 
+        // Test return to same login scene
+        clickOn("#returnButton");
+        assertEquals(loginScene, stage.getScene());
     }
 
     private void runOnFxThreadAndWait(Runnable action) throws Exception {

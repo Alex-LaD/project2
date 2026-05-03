@@ -62,7 +62,7 @@ public class LoginController {
         loginButton.setPrefWidth(SCENE_WIDTH * 0.25);
         loginButton.setStyle("-fx-background-color: #67ABFF; -fx-text-fill: white");
         Button signupButton = new Button("Signup");
-        signupButton.setId("signUpButton");
+        signupButton.setId("signupButton");
         signupButton.setPrefWidth(SCENE_WIDTH * 0.15);
 
         // Add Buttons to HBox
