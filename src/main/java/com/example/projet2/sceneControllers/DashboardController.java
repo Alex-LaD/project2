@@ -1,20 +1,22 @@
 package com.example.projet2.sceneControllers;
 
-import com.example.projet2.Transaction;
-import com.example.projet2.TransactionModel;
+import com.example.projet2.*;
+import com.example.projet2.repository.TransactionRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import java.time.LocalDate;
+import java.util.List;
 
 public class DashboardController {
 
     @FXML private Label balanceLabel;
     @FXML private Label usernameLabel;
     @FXML private TableView<Transaction> transactionTable;
-    @FXML private TableColumn<Transaction, Double>  colAmount;
-    @FXML private TableColumn<Transaction, String>  colCategory;
-    @FXML private TableColumn<Transaction, String>  colDescription;
-    @FXML private TableColumn<Transaction, java.time.LocalDate> colDate;
+    @FXML private TableColumn<Transaction, Double>    colAmount;
+    @FXML private TableColumn<Transaction, String>    colCategory;
+    @FXML private TableColumn<Transaction, String>    colDescription;
+    @FXML private TableColumn<Transaction, LocalDate> colDate;
 
     private final TransactionModel model = TransactionModel.getInstance();
 
@@ -31,25 +33,21 @@ public class DashboardController {
                 model.balanceProperty().asString("Balance: $%.2f")
         );
 
-        usernameLabel.textProperty().bind(
-                model.currentUserProperty().asString()
-        );
+        if (model.getCurrentUser() != null) {
+            usernameLabel.setText("Welcome, " + model.getCurrentUser().getUsername());
+        }
     }
 
     @FXML
-    private void handleAddTransaction() {
-        Transaction t = new Transaction(
-                0,
-                model.getCurrentUser() != null ? model.getCurrentUser().getId() : 1,
-                -50.0, "Food", "Groceries", java.time.LocalDate.now()
-        );
-        model.addTransaction(t);
+    private void goToTransactionScene() {
+        SceneManager.getInstance().navigateTo(SceneType.TRANSACTION);
     }
 
     @FXML
     private void handleDeleteTransaction() {
         Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            TransactionRepository.deleteTransaction(selected.getId());
             model.removeTransaction(selected);
         }
     }

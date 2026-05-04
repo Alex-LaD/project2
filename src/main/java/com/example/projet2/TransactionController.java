@@ -43,6 +43,7 @@ public class TransactionController {
                     java.time.LocalDate.now()
             );
             TransactionRepository.insertTransaction(transaction);
+            TransactionModel.getInstance().addTransaction(transaction);
             System.out.println("Transaction added!");
             SceneManager.getInstance().navigateTo(SceneType.DASHBOARD);
             amountField.clear();
