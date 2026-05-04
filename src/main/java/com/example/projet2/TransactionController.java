@@ -77,6 +77,7 @@ public class TransactionController {
 
         SceneManager.getInstance().navigateTo(SceneType.DASHBOARD);
     }
+
     private int getCurrentUserId() {
         User currentUser = TransactionModel.getInstance().getCurrentUser();
         return currentUser != null ? currentUser.getId() : 1;
