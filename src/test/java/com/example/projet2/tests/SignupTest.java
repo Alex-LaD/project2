@@ -52,13 +52,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Username Already Exists")
     void usernameAlreadyExists() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "already took your username";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "password1!";
 
             UserRepository.insertUser(new User(-1, username, password));
@@ -71,7 +72,7 @@ class SignupTest extends ApplicationTest {
             assertEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
@@ -82,7 +83,7 @@ class SignupTest extends ApplicationTest {
     @DisplayName("Test Username Too Short")
     void usernameTooShort() {
         try {
-            enterFields("12", "baller1!", "baller1!");
+            enterFields("67", "baller1!", "baller1!");
 
             Scene currentScene = stage.getScene();
             clickOn("#signupButton");
@@ -100,13 +101,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Password Too Short")
     void passwordTooShort() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "too short";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "Sword1!";
 
             enterFields(username, password, password);
@@ -117,7 +119,7 @@ class SignupTest extends ApplicationTest {
             assertEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
@@ -127,13 +129,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Password Doesn't Contain Digit")
     void passwordDoesNotContainDigit() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "numero no";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "password!";
 
             enterFields(username, password, password);
@@ -144,7 +147,7 @@ class SignupTest extends ApplicationTest {
             assertEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
@@ -154,13 +157,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Password Doesn't Contain Special Character")
     void passwordDoesNotContainSpecial() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "not special";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "password1";
 
             enterFields(username, password, password);
@@ -171,7 +175,7 @@ class SignupTest extends ApplicationTest {
             assertEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
@@ -181,13 +185,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Password And Confirm Not Equal")
     void PassWordAndConfirmNotEqual() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "mismatch";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "password1!";
 
             enterFields(username, password, "OOPS! WRONG PASSWORD LOL");
@@ -198,7 +203,7 @@ class SignupTest extends ApplicationTest {
             assertEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
@@ -208,13 +213,14 @@ class SignupTest extends ApplicationTest {
     @Test
     @DisplayName("Test Working Username And Password")
     void testWorking() {
-        int usernameUnique = 0;
+        int usernameNumber = 0;
+        String usernameBase = "good";
         try {
-            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
-                usernameUnique++;
+            while (UserRepository.getUserByUsername(usernameBase + usernameNumber) != null) {
+                usernameNumber++;
             }
 
-            String username = String.format("Test%d", usernameUnique);
+            String username = usernameBase + usernameNumber;
             String password = "password1!";
 
             enterFields(username, password, password);
@@ -228,11 +234,23 @@ class SignupTest extends ApplicationTest {
             assertNotEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
-            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            UserRepository.deleteUserByUsername(usernameBase + usernameNumber);
             e.printStackTrace();
             // Test failed if it ended up in the catch block
             assertTrue(false);
         }
+    }
+
+    @Test
+    @DisplayName("Check Return To Login Button")
+    void returnTest() {
+
+        Scene currentScene = stage.getScene();
+        clickOn("#returnButton");
+        assertNotEquals(currentScene, stage.getScene());
+
+        clickOn("#signupButton");
+        assertEquals(currentScene, stage.getScene());
     }
 
     void enterFields(String username, String password, String confirm) {
