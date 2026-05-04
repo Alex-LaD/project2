@@ -46,9 +46,28 @@ public class DashboardController {
     @FXML
     private void handleDeleteTransaction() {
         Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            TransactionRepository.deleteTransaction(selected.getId());
-            model.removeTransaction(selected);
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a transaction to delete.");
+            alert.showAndWait();
+            return;
         }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Delete \"" + selected.getDescription() + "\"?");
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                TransactionRepository.deleteTransaction(selected.getId());
+                model.removeTransaction(selected);
+                Alert success = new Alert(Alert.AlertType.INFORMATION);
+                success.setTitle("Deleted");
+                success.setHeaderText(null);
+                success.setContentText("Transaction deleted successfully.");
+                success.showAndWait();
+            }
+        });
     }
 }
