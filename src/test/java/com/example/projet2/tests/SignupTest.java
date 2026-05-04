@@ -124,6 +124,33 @@ class SignupTest extends ApplicationTest {
         }
     }
 
+    @Test
+    @DisplayName("Test Username Contains Digit")
+    void usernameContainsDigit() {
+        int usernameUnique = 0;
+        try {
+            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
+                usernameUnique++;
+            }
+
+            String username = String.format("Test%d", usernameUnique);
+            String password = "password!";
+
+            enterFields(username, password, password);
+
+            Scene currentScene = stage.getScene();
+            clickOn("#signupButton");
+            UserRepository.deleteUserByUsername(username);
+            assertEquals(currentScene, stage.getScene());
+
+        } catch (Exception e) {
+            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            e.printStackTrace();
+            // Test failed if it ended up in the catch block
+            assertTrue(false);
+        }
+    }
+
     void enterFields(String username, String password, String confirm) {
         clickOn("#usernameField");
         write(username);
