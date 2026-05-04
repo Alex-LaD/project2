@@ -1,4 +1,4 @@
-package Tests;
+package com.example.projet2.tests;
 
 import com.example.projet2.Transaction;
 import com.example.projet2.TransactionModel;

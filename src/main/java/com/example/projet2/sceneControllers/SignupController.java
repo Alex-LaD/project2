@@ -42,6 +42,7 @@ public class SignupController {
         // Add in username field and text
         Label username = new Label("Enter Username");
         TextField usernameField = new TextField();
+        usernameField.setId("usernameField");
         usernameField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox usernameBox = new VBox(username,usernameField);
         usernameBox.setAlignment(Pos.CENTER);
@@ -49,6 +50,7 @@ public class SignupController {
         // Add in password field and text
         Label password = new Label("Enter Password");
         PasswordField passwordField = new PasswordField();
+        passwordField.setId("passwordField");
         passwordField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox passwordBox = new VBox(password,passwordField);
         passwordBox.setAlignment(Pos.CENTER);
@@ -56,15 +58,18 @@ public class SignupController {
         // Add in confirm field and text
         Label confirm = new Label("Confirm Password");
         PasswordField confirmField = new PasswordField();
+        confirmField.setId("confirmField");
         confirmField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox confirmBox = new VBox(confirm,confirmField);
         confirmBox.setAlignment(Pos.CENTER);
 
         // Create signup button
         Button signup = new Button("Sign up");
+        signup.setId("signupButton");
 
         // Create return to login button
         Button rtrn = new Button("Return to login");
+        rtrn.setId("returnButton");
 
         // Store buttons in HBox
         HBox buttonBox = new HBox(signup,rtrn);
