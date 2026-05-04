@@ -34,6 +34,7 @@ class SignupTest extends ApplicationTest {
         Platform.runLater(() -> {
             try {
                 System.setProperty("app.db.url", "jdbc:sqlite::memory");
+                sceneManager.uncacheAll();
                 sceneManager.navigateTo(SceneType.SIGNUP);
                 stage.show();
             } catch (Exception e) {
@@ -68,6 +69,53 @@ class SignupTest extends ApplicationTest {
             clickOn("#signupButton");
             UserRepository.deleteUserByUsername(username);
             assertEquals(currentScene, stage.getScene());
+
+        } catch (Exception e) {
+            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            e.printStackTrace();
+            // Test failed if it ended up in the catch block
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    @DisplayName("Test Username Too Short")
+    void usernameTooShort() {
+        try {
+            enterFields("12", "baller1!", "baller1!");
+
+            Scene currentScene = stage.getScene();
+            clickOn("#signupButton");
+            UserRepository.deleteUserByUsername("12");
+            assertEquals(currentScene, stage.getScene());
+
+        } catch (Exception e) {
+            UserRepository.deleteUserByUsername("12");
+            e.printStackTrace();
+            // Test failed if it ended up in the catch block
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    @DisplayName("Test Password Too Short")
+    void passwordTooShort() {
+        int usernameUnique = 0;
+        try {
+            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
+                usernameUnique++;
+            }
+
+            String username = String.format("Test%d", usernameUnique);
+            String password = "word1!";
+
+            enterFields(username, password, password);
+
+            Scene currentScene = stage.getScene();
+            clickOn("#signupButton");
+            UserRepository.deleteUserByUsername(username);
+            assertEquals(currentScene, stage.getScene());
+
         } catch (Exception e) {
             UserRepository.deleteUserByUsername("Test" + usernameUnique);
             e.printStackTrace();

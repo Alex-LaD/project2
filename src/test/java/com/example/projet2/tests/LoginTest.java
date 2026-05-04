@@ -34,6 +34,7 @@ class LoginTest extends ApplicationTest {
             // Username and Password are impossible to create naturally
             // Won't interfere with any real users
             UserRepository.insertUser(new User(-1, "x", "password"));
+            sceneManager.uncacheAll();
             sceneManager.navigateTo(SceneType.LOGIN);
             stage.show();
         });
