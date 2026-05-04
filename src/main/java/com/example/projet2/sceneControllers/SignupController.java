@@ -23,7 +23,8 @@ public class SignupController {
                                                 "Password needs to be at least 8 characters\n" +
                                                 "Password needs at least one number\n" +
                                                 "Password needs at least one special character\n" +
-                                                "Password does not match confirm password";
+                                                "Password does not match confirm password\n" +
+                                                "Error generating id";
 
     private final ArrayList<Label> errorList = new ArrayList<>();
     private final VBox errorBox = new VBox();
@@ -94,12 +95,14 @@ public class SignupController {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirm = confirmField.getText();
-        boolean isValid = checkValidity(username, password, confirm);
+        int id = UserRepository.getUniqueId();
+        boolean isValid = checkValidity(username, password, confirm, id);
 
         // if valid:
         if (isValid) {
+
             // Store new user in database
-            UserRepository.insertUser(new User(67,username, password));
+            UserRepository.insertUser(new User(id,username, password));
 
             // Get scene manager
             SceneManager sceneManager = SceneManager.getInstance();
@@ -112,7 +115,7 @@ public class SignupController {
         }
     }
 
-    private boolean checkValidity(String username, String password, String confirm) {
+    private boolean checkValidity(String username, String password, String confirm, int id) {
         boolean isValid = true;
         ArrayList<Boolean> failConditions = new ArrayList();
 
@@ -128,6 +131,8 @@ public class SignupController {
         failConditions.add(!password.matches("^.*([^a-zA-z0-9\\s]|_).*$"));
         // password and confirm must be equal
         failConditions.add(!password.equals(confirm));
+        // Error generating id
+        failConditions.add(id < 0);
 
         // throw exception if failConditions and errorList are not same size
         if (failConditions.size() != errorList.size()) {

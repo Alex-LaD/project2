@@ -3,8 +3,11 @@ package com.example.projet2.sceneControllers;
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 
+import com.example.projet2.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -75,15 +78,7 @@ public class ConverterController {
 
     private HashMap<String, String> getCurrencies() {
         try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.exchangerate.host/list?access_key=" + APIKey))
-                    .header("Accept", "application/json")
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String json = response.body();
+            String json = getRequest("https://api.exchangerate.host/list?access_key=" + APIKey);
 
             ObjectMapper mapper = new ObjectMapper();
             HashMap<String, Object> jsonMap = mapper.readValue(json, new TypeReference<HashMap<String, Object>>(){});
@@ -95,4 +90,15 @@ public class ConverterController {
         }
     }
 
+    private String getRequest(String url) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Accept", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
 }

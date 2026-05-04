@@ -2,6 +2,7 @@ package com.example.projet2.sceneControllers;
 
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
+import com.example.projet2.TransactionModel;
 import com.example.projet2.User;
 import com.example.projet2.repository.UserRepository;
 
@@ -96,6 +97,9 @@ public class LoginController {
 
         // Check if username and password match a user in database
         if (user != null && user.getPassword().equals(passwordField.getText())) {
+
+            TransactionModel.getInstance().setCurrentUser(user);
+
             SceneManager sceneManager = SceneManager.getInstance();
 
             // uncache all
