@@ -15,6 +15,8 @@ public class TransactionModel {
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>();
 
     private final DoubleProperty balance = new SimpleDoubleProperty(0.0);
+    private final ObjectProperty<Transaction> selectedTransaction = new SimpleObjectProperty<>();
+
 
     private TransactionModel() {
         transactions.addListener((javafx.collections.ListChangeListener<Transaction>) change -> {
@@ -47,4 +49,8 @@ public class TransactionModel {
 
     public ReadOnlyDoubleProperty balanceProperty() { return balance; }
     public double getBalance() { return balance.get(); }
+    public ObjectProperty<Transaction> selectedTransactionProperty() { return selectedTransaction; }
+    public Transaction getSelectedTransaction() { return selectedTransaction.get(); }
+    public void setSelectedTransaction(Transaction t) { selectedTransaction.set(t); }
+
 }
