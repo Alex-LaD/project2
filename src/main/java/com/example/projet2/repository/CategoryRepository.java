@@ -1,36 +1,34 @@
 package com.example.projet2.repository;
+import com.example.projet2.Category;
 import com.example.projet2.database.DatabaseManager;
-import com.example.projet2.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRepository {
+public class CategoryRepository {
 
-    public static void insertUser(User user) {
-        String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
+    public static void insertCategory(Category category) {
+        String sql = "INSERT INTO categories(name) VALUES(?)";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getPassword());
+            pstmt.setString(1, category.getName());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static User getUserByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
+    public static Category getCategoryByName(String name) {
+        String sql = "SELECT * FROM categories WHERE name = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+            pstmt.setString(1, name);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(
+                return new Category(
                         rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("name")
                 );
             }
         } catch (SQLException e) {
@@ -39,23 +37,23 @@ public class UserRepository {
         return null;
     }
 
-    public static void deleteUserByUsername(String username) {
-        String sql = "DELETE FROM users WHERE username = ?";
+    public static void deleteCategoryByName(String name) {
+        String sql = "DELETE FROM categories WHERE name = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+            pstmt.setString(1, name);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void updatePassword(String username, String newPassword) {
-        String sql = "UPDATE users SET password = ? WHERE username = ?";
+    public static void updateCategory(String oldName, String newName) {
+        String sql = "UPDATE categories SET name = ? WHERE name = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newPassword);
-            pstmt.setString(2, username);
+            pstmt.setString(1, newName);
+            pstmt.setString(2, oldName);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
