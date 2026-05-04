@@ -54,8 +54,15 @@ public class DashboardController {
         SceneManager.getInstance().navigateTo(SceneType.TRANSACTION);
     }
 
+    @FXML
+    private void goToConverterScene() {
+        SceneManager.getInstance().navigateTo(SceneType.CONVERTER);
+    }
+
     private int getCurrentUserId() {
         User currentUser = TransactionModel.getInstance().getCurrentUser();
         return currentUser != null ? currentUser.getId() : 1;
     }
+
+
 }
