@@ -37,6 +37,9 @@ public class DashboardController {
 
     private int getCurrentUserId() {
         User currentUser = TransactionModel.getInstance().getCurrentUser();
-        return currentUser != null ? currentUser.getId() : 1;
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+        return currentUser.getId();
     }
 }

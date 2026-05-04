@@ -10,19 +10,22 @@ import java.util.List;
 
 public class TransactionRepository {
 
-    public static void insertTransaction(Transaction t) {
+    public static int insertTransaction(Transaction t) {
         String sql = "INSERT INTO transactions(user_id, amount, category, description, date) VALUES(?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, t.getUserId());
             pstmt.setDouble(2, t.getAmount());
             pstmt.setString(3, t.getCategory());
             pstmt.setString(4, t.getDescription());
             pstmt.setString(5, t.getDate().toString());
             pstmt.executeUpdate();
+            ResultSet keys = pstmt.getGeneratedKeys();
+            if (keys.next()) return keys.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static List<Transaction> getTransactionsByUser(int userId) {

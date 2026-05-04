@@ -2,8 +2,12 @@ package com.example.projet2.sceneControllers;
 
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
+import com.example.projet2.Transaction;
+import com.example.projet2.TransactionModel;
 import com.example.projet2.User;
+import com.example.projet2.repository.TransactionRepository;
 import com.example.projet2.repository.UserRepository;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -102,7 +106,16 @@ public class LoginController {
         if (user != null && user.getPassword().equals(passwordField.getText())) {
             SceneManager sceneManager = SceneManager.getInstance();
 
-            // uncache all
+            // Set the current user FIRST
+            TransactionModel model = TransactionModel.getInstance();
+            model.setCurrentUser(user);
+
+            // Clear old transactions, then load this user's transactions from DB
+            model.getTransactions().clear();
+            List<Transaction> userTransactions = TransactionRepository.getTransactionsByUser(user.getId());
+            model.getTransactions().addAll(userTransactions);
+
+            // uncache all scenes so they re-initialize with the new user
             sceneManager.uncacheAll();
 
             // Navigate to dashboard scene

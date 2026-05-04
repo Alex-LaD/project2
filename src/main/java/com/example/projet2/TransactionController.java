@@ -55,15 +55,17 @@ public class TransactionController {
             return;
         }
 
-        int userId = TransactionModel.getInstance().getCurrentUser() != null
-                ? TransactionModel.getInstance().getCurrentUser().getId() : 1;
+        int userId = getCurrentUserId();
 
         Transaction transaction = new Transaction(
                 0, userId, amount, category, description, java.time.LocalDate.now()
         );
 
-        TransactionRepository.insertTransaction(transaction);
-        TransactionModel.getInstance().addTransaction(transaction);
+        int generatedId = TransactionRepository.insertTransaction(transaction);
+        Transaction savedTransaction = new Transaction(
+                generatedId, userId, amount, category, description, java.time.LocalDate.now()
+        );
+        TransactionModel.getInstance().addTransaction(savedTransaction);
 
         Alert success = new Alert(Alert.AlertType.INFORMATION);
         success.setTitle("Success");
@@ -80,6 +82,9 @@ public class TransactionController {
 
     private int getCurrentUserId() {
         User currentUser = TransactionModel.getInstance().getCurrentUser();
-        return currentUser != null ? currentUser.getId() : 1;
+        if (currentUser == null) {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
+        return currentUser.getId();
     }
 }
