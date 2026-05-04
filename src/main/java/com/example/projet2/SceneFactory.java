@@ -1,6 +1,7 @@
 package com.example.projet2;
 
 import com.example.projet2.sceneControllers.*;
+import com.example.projet2.sceneControllers.UnusedDashboardController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,30 +16,8 @@ public class SceneFactory {
         return switch (type) {
             case LOGIN -> new LoginController().buildScene();
             case SIGNUP -> new SignupController().buildScene();
-            case DASHBOARD -> buildDashboardScene(stage);
-            case TRANSACTION -> buildTransactionScene(stage);
+            case DASHBOARD -> new DashboardController().buildScene();
+            case TRANSACTION -> new TransactionController().buildScene();
         };
-    }
-
-    private static Scene buildDashboardScene(Stage stage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneFactory.class.getResource("/com/example/projet2/dashboard-view.fxml"));
-            Parent root = loader.load();
-            return new Scene(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Scene(new VBox(new Label("Error loading Dashboard")));
-        }
-    }
-
-    static Scene buildTransactionScene(Stage stage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneFactory.class.getResource("/com/example/projet2/transaction-view.fxml"));
-            Parent root = loader.load();
-            return new Scene(root, 600, 400);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Scene(new VBox(new Label("Error loading Transaction Scene")), 600, 400);
-        }
     }
 }

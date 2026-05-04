@@ -125,7 +125,7 @@ public class SignupController {
         // password must contain at least one digit
         failConditions.add(!password.matches("^.*\\d.*$"));
         // password must contain at least one special character
-        failConditions.add(!password.matches("^.*[^a-zA-z0-9\\s]|_.*$"));
+        failConditions.add(!password.matches("^.*([^a-zA-z0-9\\s]|_).*$"));
         // password and confirm must be equal
         failConditions.add(!password.equals(confirm));
 

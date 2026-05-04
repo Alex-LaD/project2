@@ -1,56 +1,61 @@
 package com.example.projet2.sceneControllers;
 
-import com.example.projet2.Transaction;
-import com.example.projet2.TransactionModel;
+import com.example.projet2.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import com.example.projet2.repository.TransactionRepository;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.List;
 
 public class DashboardController {
 
-    @FXML private Label balanceLabel;
-    @FXML private Label usernameLabel;
-    @FXML private TableView<Transaction> transactionTable;
-    @FXML private TableColumn<Transaction, Double>  colAmount;
-    @FXML private TableColumn<Transaction, String>  colCategory;
-    @FXML private TableColumn<Transaction, String>  colDescription;
-    @FXML private TableColumn<Transaction, java.time.LocalDate> colDate;
+    @FXML
+    private Label transactionCountLabel;
 
-    private final TransactionModel model = TransactionModel.getInstance();
+    @FXML
+    private Label totalExpensesLabel;
+
+    public Scene buildScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneFactory.class.getResource("/com/example/projet2/dashboard-view.fxml"));
+            Parent root = loader.load();
+            return new Scene(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Scene(new VBox(new Label("Error loading Dashboard")));
+        }
+    }
 
     @FXML
     public void initialize() {
-        colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
-        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-        transactionTable.setItems(model.getTransactions());
-
-        balanceLabel.textProperty().bind(
-                model.balanceProperty().asString("Balance: $%.2f")
-        );
-
-        usernameLabel.textProperty().bind(
-                model.currentUserProperty().asString()
-        );
+        refreshDashboard();
     }
 
     @FXML
-    private void handleAddTransaction() {
-        Transaction t = new Transaction(
-                0,
-                model.getCurrentUser() != null ? model.getCurrentUser().getId() : 1,
-                -50.0, "Food", "Groceries", java.time.LocalDate.now()
-        );
-        model.addTransaction(t);
+    private void refreshDashboard() {
+        int userId = getCurrentUserId();
+        List<Transaction> transactions =
+                TransactionRepository.getTransactionsByUser(userId);
+        transactionCountLabel.setText("Transactions: " + transactions.size());
+        double total = transactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+        totalExpensesLabel.setText(String.format("Total expenses: $%.2f", total));
     }
 
     @FXML
-    private void handleDeleteTransaction() {
-        Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            model.removeTransaction(selected);
-        }
+    private void goToTransactionScene() {
+        SceneManager.getInstance().navigateTo(SceneType.TRANSACTION);
+    }
+
+    private int getCurrentUserId() {
+        User currentUser = TransactionModel.getInstance().getCurrentUser();
+        return currentUser != null ? currentUser.getId() : 1;
     }
 }
