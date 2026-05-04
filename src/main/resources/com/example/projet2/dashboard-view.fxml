@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.projet2.DashboardController"
+      spacing="20"
+      alignment="CENTER"
+      prefWidth="600"
+      prefHeight="400">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <Label text="Personal Budget Dashboard"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <Label fx:id="transactionCountLabel" text="Transactions: 0"/>
+    <Label fx:id="totalExpensesLabel" text="Total expenses: $0.00"/>
+
+    <Button text="Refresh" onAction="#refreshDashboard"/>
+    <Button text="Add Transaction" onAction="#goToTransactionScene"/>
+
+</VBox>
