@@ -107,7 +107,7 @@ class SignupTest extends ApplicationTest {
             }
 
             String username = String.format("Test%d", usernameUnique);
-            String password = "word1!";
+            String password = "Sword1!";
 
             enterFields(username, password, password);
 
@@ -125,8 +125,8 @@ class SignupTest extends ApplicationTest {
     }
 
     @Test
-    @DisplayName("Test Username Contains Digit")
-    void usernameContainsDigit() {
+    @DisplayName("Test Password Doesn't Contain Digit")
+    void passwordDoesNotContainDigit() {
         int usernameUnique = 0;
         try {
             while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
@@ -152,8 +152,8 @@ class SignupTest extends ApplicationTest {
     }
 
     @Test
-    @DisplayName("Test Username Contains Special Character")
-    void usernameContainsSpecial() {
+    @DisplayName("Test Password Doesn't Contain Special Character")
+    void passwordDoesNotContainSpecial() {
         int usernameUnique = 0;
         try {
             while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
@@ -169,6 +169,63 @@ class SignupTest extends ApplicationTest {
             clickOn("#signupButton");
             UserRepository.deleteUserByUsername(username);
             assertEquals(currentScene, stage.getScene());
+
+        } catch (Exception e) {
+            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            e.printStackTrace();
+            // Test failed if it ended up in the catch block
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    @DisplayName("Test Password And Confirm Not Equal")
+    void PassWordAndConfirmNotEqual() {
+        int usernameUnique = 0;
+        try {
+            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
+                usernameUnique++;
+            }
+
+            String username = String.format("Test%d", usernameUnique);
+            String password = "password1!";
+
+            enterFields(username, password, "OOPS! WRONG PASSWORD LOL");
+
+            Scene currentScene = stage.getScene();
+            clickOn("#signupButton");
+            UserRepository.deleteUserByUsername(username);
+            assertEquals(currentScene, stage.getScene());
+
+        } catch (Exception e) {
+            UserRepository.deleteUserByUsername("Test" + usernameUnique);
+            e.printStackTrace();
+            // Test failed if it ended up in the catch block
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    @DisplayName("Test Working Username And Password")
+    void testWorking() {
+        int usernameUnique = 0;
+        try {
+            while (UserRepository.getUserByUsername(String.format("Test%d", usernameUnique)) != null) {
+                usernameUnique++;
+            }
+
+            String username = String.format("Test%d", usernameUnique);
+            String password = "password1!";
+
+            enterFields(username, password, password);
+
+            Scene currentScene = stage.getScene();
+            clickOn("#signupButton");
+            UserRepository.deleteUserByUsername(username);
+            assertNotEquals(currentScene, stage.getScene());
+
+            clickOn("#signupButton");
+            assertNotEquals(currentScene, stage.getScene());
 
         } catch (Exception e) {
             UserRepository.deleteUserByUsername("Test" + usernameUnique);
