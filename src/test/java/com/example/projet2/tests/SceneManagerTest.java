@@ -9,9 +9,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import org.junit.jupiter.api.*;
+import org.testfx.api.FxToolkit;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,18 +29,22 @@ class SceneManagerTest {
 
         try {
             Platform.startup(initLatch::countDown);
-        } catch (IllegalStateException ignored) {
-            // JavaFX already started
+        } catch (IllegalStateException e) {
+            initLatch.countDown();
         }
 
         Platform.runLater(() -> {
-            stage = new Stage();
-            SceneManager.init(stage);
-            sceneManager = SceneManager.getInstance();
-            initLatch.countDown();
+            try {
+                stage = FxToolkit.registerPrimaryStage();
+                SceneManager.init(stage);
+                sceneManager = SceneManager.getInstance();
+                initLatch.countDown();
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
         });
 
-        if (!initLatch.await(10, TimeUnit.SECONDS)) {
+        if (!initLatch.await(25, TimeUnit.SECONDS)) {
             throw new RuntimeException("Stage creation timed out");
         }
     }
