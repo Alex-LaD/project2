@@ -59,6 +59,13 @@ public class DashboardController {
         SceneManager.getInstance().navigateTo(SceneType.CONVERTER);
     }
 
+    @FXML
+    private void signOut() {
+        SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.uncacheAll();
+        sceneManager.navigateTo(SceneType.LOGIN);
+    }
+
     private int getCurrentUserId() {
         User currentUser = TransactionModel.getInstance().getCurrentUser();
         return currentUser != null ? currentUser.getId() : 1;
