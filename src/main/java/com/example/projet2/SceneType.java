@@ -5,5 +5,7 @@ public enum SceneType {
     SIGNUP,
     DASHBOARD,
     TRANSACTION,
+    TRANSACTION_DETAIL,
+    EDIT_TRANSACTION,
     CONVERTER
 }

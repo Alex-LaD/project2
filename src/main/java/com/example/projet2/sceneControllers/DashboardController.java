@@ -1,26 +1,22 @@
 package com.example.projet2.sceneControllers;
 
 import com.example.projet2.*;
-import com.example.projet2.repository.UserRepository;
+import com.example.projet2.*;
+import com.example.projet2.repository.TransactionRepository;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import java.util.List;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import com.example.projet2.repository.TransactionRepository;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class DashboardController {
 
-    @FXML
-    private Label transactionCountLabel;
-
-    @FXML
-    private Label totalExpensesLabel;
+    @FXML private Label transactionCountLabel;
+    @FXML private Label totalExpensesLabel;
 
     public Scene buildScene() {
         try {
@@ -54,6 +50,12 @@ public class DashboardController {
     @FXML
     private void goToTransactionScene() {
         SceneManager.getInstance().navigateTo(SceneType.TRANSACTION);
+    }
+
+    @FXML
+    private void goToTransactionDetail() {
+        SceneManager.getInstance().uncache(SceneType.TRANSACTION_DETAIL);
+        SceneManager.getInstance().navigateTo(SceneType.TRANSACTION_DETAIL);
     }
 
     @FXML

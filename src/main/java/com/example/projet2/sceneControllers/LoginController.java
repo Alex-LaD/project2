@@ -3,8 +3,12 @@ package com.example.projet2.sceneControllers;
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 import com.example.projet2.TransactionModel;
+import com.example.projet2.Transaction;
+import com.example.projet2.TransactionModel;
 import com.example.projet2.User;
+import com.example.projet2.repository.TransactionRepository;
 import com.example.projet2.repository.UserRepository;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,6 +48,7 @@ public class LoginController {
         // Create Username label and field;
         Label usernamePrompt = new Label("Enter Username");
         TextField usernameField = new TextField();
+        usernameField.setId("usernameField");
         usernameField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox usernameBox = new VBox(usernamePrompt, usernameField);
         usernameBox.setAlignment(Pos.CENTER);
@@ -51,15 +56,18 @@ public class LoginController {
         // Create password label and field
         Label passwordPrompt = new Label("Enter Password");
         PasswordField passwordField = new PasswordField();
+        passwordField.setId("passwordField");
         passwordField.setMaxWidth(SCENE_WIDTH * 0.5);
         VBox passwordBox = new VBox(passwordPrompt, passwordField);
         passwordBox.setAlignment(Pos.CENTER);
 
         // Create Buttons
         Button loginButton = new Button("Login");
+        loginButton.setId("loginButton");
         loginButton.setPrefWidth(SCENE_WIDTH * 0.25);
         loginButton.setStyle("-fx-background-color: #67ABFF; -fx-text-fill: white");
         Button signupButton = new Button("Signup");
+        signupButton.setId("signupButton");
         signupButton.setPrefWidth(SCENE_WIDTH * 0.15);
 
         // Add Buttons to HBox
@@ -102,7 +110,16 @@ public class LoginController {
 
             SceneManager sceneManager = SceneManager.getInstance();
 
-            // uncache all
+            // Set the current user FIRST
+            TransactionModel model = TransactionModel.getInstance();
+            model.setCurrentUser(user);
+
+            // Clear old transactions, then load this user's transactions from DB
+            model.getTransactions().clear();
+            List<Transaction> userTransactions = TransactionRepository.getTransactionsByUser(user.getId());
+            model.getTransactions().addAll(userTransactions);
+
+            // uncache all scenes so they re-initialize with the new user
             sceneManager.uncacheAll();
 
             // Navigate to dashboard scene

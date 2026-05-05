@@ -1,6 +1,7 @@
 package com.example.projet2;
 
 import com.example.projet2.database.DatabaseManager;
+import com.example.projet2.repository.UserRepository;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

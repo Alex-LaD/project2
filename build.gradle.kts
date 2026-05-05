@@ -36,7 +36,11 @@ javafx {
 
 dependencies {
     implementation("org.xerial:sqlite-jdbc:3.46.0.0")
+    testImplementation("org.hamcrest:hamcrest:2.2")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.testfx:testfx-junit5:4.0.18")
+    testImplementation("org.testfx:openjfx-monocle:jdk-12.0.1+2")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -46,6 +50,13 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
     modularity.inferModulePath.set(false)
+
+    // Headless mode — uncomment for CI runs
+    // systemProperty 'testfx.robot', 'glass'
+    // systemProperty 'testfx.headless','true'
+    // systemProperty 'prism.order', 'sw'
+    // systemProperty 'prism.text', 't2k'
+    // systemProperty 'java.awt.headless','true'
 }
 
 jlink {
