@@ -1,10 +1,7 @@
 package com.example.projet2.sceneControllers;
 
-import com.example.projet2.SceneManager;
-import com.example.projet2.SceneType;
+import com.example.projet2.*;
 
-import com.example.projet2.TransactionModel;
-import com.example.projet2.User;
 import com.example.projet2.repository.TransactionRepository;
 import com.example.projet2.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +37,7 @@ public class ConverterController {
 
     public Scene buildScene() {
 
-        currencies = new HashMap<>(); //getCurrencies();
-        currencies.put("USD", "United States Dollar");
-        currencies.put("EUR", "Euro");
-        currencies.put("MXN", "Mexican Peso");
+        currencies = getCurrencies();
 
         List<String> currencyValues = new ArrayList<>(currencies.values().stream().toList());
         currencyValues.sort(String.CASE_INSENSITIVE_ORDER);
@@ -84,9 +78,15 @@ public class ConverterController {
         if (newCurrencyShort == null) {
             return;
         }
-        double convwesionRate = getConversion(oldCurrency, newCurrencyShort);
 
-        TransactionRepository.getTransactionsByUser(currentUser.getId());
+        double convwesionRate = getConversion(oldCurrency, newCurrencyShort);
+        List<Transaction> transactions = TransactionRepository.getTransactionsByUser(currentUser.getId());
+        for (Transaction transaction : transactions) {
+            transaction.setAmount(transaction.getAmount() * convwesionRate);
+            TransactionRepository.updateTransaction(transaction);
+        }
+        currentUser.setCurrency(newCurrencyShort);
+        UserRepository.updateCurrency(currentUser.getUsername(), newCurrencyShort);
     }
 
     private String extractKeyFromValue(String value) {

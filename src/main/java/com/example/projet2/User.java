@@ -21,4 +21,5 @@ public class User {
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
 }

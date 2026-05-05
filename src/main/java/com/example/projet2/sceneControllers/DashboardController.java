@@ -1,6 +1,7 @@
 package com.example.projet2.sceneControllers;
 
 import com.example.projet2.*;
+import com.example.projet2.repository.UserRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,13 +41,14 @@ public class DashboardController {
     @FXML
     private void refreshDashboard() {
         int userId = getCurrentUserId();
+        String currency = TransactionModel.getInstance().getCurrentUser().getCurrency();
         List<Transaction> transactions =
                 TransactionRepository.getTransactionsByUser(userId);
         transactionCountLabel.setText("Transactions: " + transactions.size());
         double total = transactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum();
-        totalExpensesLabel.setText(String.format("Total expenses: $%.2f", total));
+        totalExpensesLabel.setText(String.format("Total expenses: %.2f %s", total, currency));
     }
 
     @FXML
