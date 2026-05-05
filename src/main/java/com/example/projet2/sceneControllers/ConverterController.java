@@ -3,6 +3,9 @@ package com.example.projet2.sceneControllers;
 import com.example.projet2.SceneManager;
 import com.example.projet2.SceneType;
 
+import com.example.projet2.TransactionModel;
+import com.example.projet2.User;
+import com.example.projet2.repository.TransactionRepository;
 import com.example.projet2.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -25,6 +28,8 @@ public class ConverterController {
 
     private static final String APIKey = "d6511f794deda2c3503d483b0672bb8c";
 
+    Map<String, String> currencies;
+
     // Window dimensions in pixels
     private static final int SCENE_WIDTH = 300;
     private static final int SCENE_HEIGHT = 100;
@@ -35,7 +40,7 @@ public class ConverterController {
 
     public Scene buildScene() {
 
-        Map<String, String> currencies = new HashMap<>(); //getCurrencies();
+        currencies = new HashMap<>(); //getCurrencies();
         currencies.put("USD", "United States Dollar");
         currencies.put("EUR", "Euro");
         currencies.put("MXN", "Mexican Peso");
@@ -59,7 +64,7 @@ public class ConverterController {
 
         rtrn.setOnAction(_ -> { handleReturn(); });
 
-        convert.setOnAction(_ -> { convert(); });
+        convert.setOnAction(_ -> { convert(comboBox.getValue()); });
 
         VBox root = new VBox(hBox, buttonBox);
         root.setSpacing(VBOX_SPACING);
@@ -72,8 +77,44 @@ public class ConverterController {
         SceneManager.getInstance().navigateTo(SceneType.DASHBOARD);
     }
 
-    private void convert() {
-        return;
+    private void convert(String newCurrencyFull) {
+        User currentUser = TransactionModel.getInstance().getCurrentUser();
+        String oldCurrency = currentUser.getCurrency();
+        String newCurrencyShort = extractKeyFromValue(newCurrencyFull);
+        if (newCurrencyShort == null) {
+            return;
+        }
+        double convwesionRate = getConversion(oldCurrency, newCurrencyShort);
+
+        TransactionRepository.getTransactionsByUser(currentUser.getId());
+    }
+
+    private String extractKeyFromValue(String value) {
+        if (currencies.containsValue(value)) {
+            for (String key : currencies.keySet()) {
+                if (currencies.get(key).equals(value)) {
+                    return key;
+                }
+            }
+        }
+        return null;
+    }
+
+    private double getConversion(String oldCurrency, String newCurrency) {
+        try {
+            String conversion = getRequest("https://api.exchangerate.host/convert?" +
+                                            "access_key=" + APIKey +
+                                            "&from=" + oldCurrency +
+                                            "&to=" + newCurrency +
+                                            "&amount=" + 1); // Get conversion rate so calculations can be done locally.
+
+            ObjectMapper mapper = new ObjectMapper();
+            HashMap<String, Object> map = mapper.readValue(conversion, new TypeReference<HashMap<String, Object>>(){});
+            return mapper.convertValue(map.get("result"), new TypeReference<Double>(){});
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private HashMap<String, String> getCurrencies() {
