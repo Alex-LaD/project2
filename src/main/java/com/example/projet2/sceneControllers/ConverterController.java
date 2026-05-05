@@ -28,16 +28,19 @@ public class ConverterController {
     Map<String, String> currencies;
 
     // Window dimensions in pixels
-    private static final int SCENE_WIDTH = 300;
+    private static final int SCENE_WIDTH = 450;
     private static final int SCENE_HEIGHT = 100;
 
-    private static final double HBOX_SPACING = 5;
+    private static final double HBOX_SPACING = 20;
     private static final double VBOX_SPACING = 15;
     private static final double BUTTON_SPACING = 10;
 
     public Scene buildScene() {
 
-        currencies = getCurrencies();
+        currencies = new HashMap<>(); //getCurrencies();
+        currencies.put("USD", "United States Dollar");
+        currencies.put("EUR", "Euro");
+        currencies.put("Coolness Coins", "Hi");
 
         List<String> currencyValues = new ArrayList<>(currencies.values().stream().toList());
         currencyValues.sort(String.CASE_INSENSITIVE_ORDER);
@@ -79,14 +82,17 @@ public class ConverterController {
             return;
         }
 
-        double convwesionRate = getConversion(oldCurrency, newCurrencyShort);
-        List<Transaction> transactions = TransactionRepository.getTransactionsByUser(currentUser.getId());
+        double conversionRate = 2;//getConversion(oldCurrency, newCurrencyShort);
+        List<Transaction> transactions = TransactionModel.getInstance().getTransactions();
         for (Transaction transaction : transactions) {
-            transaction.setAmount(transaction.getAmount() * convwesionRate);
+            transaction.setAmount(transaction.getAmount() * conversionRate);
             TransactionRepository.updateTransaction(transaction);
+            TransactionModel.getInstance().updateTransaction(transaction, transaction);
         }
+
         currentUser.setCurrency(newCurrencyShort);
         UserRepository.updateCurrency(currentUser.getUsername(), newCurrencyShort);
+        SceneManager.getInstance().uncache(SceneType.TRANSACTION_DETAIL);
     }
 
     private String extractKeyFromValue(String value) {
@@ -101,6 +107,10 @@ public class ConverterController {
     }
 
     private double getConversion(String oldCurrency, String newCurrency) {
+        if (oldCurrency.equals(newCurrency)) {
+            return 1;
+        }
+
         try {
             String conversion = getRequest("https://api.exchangerate.host/convert?" +
                                             "access_key=" + APIKey +
