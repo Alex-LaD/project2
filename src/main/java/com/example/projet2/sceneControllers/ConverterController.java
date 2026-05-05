@@ -37,10 +37,7 @@ public class ConverterController {
 
     public Scene buildScene() {
 
-        currencies = new HashMap<>(); //getCurrencies();
-        currencies.put("USD", "United States Dollar");
-        currencies.put("EUR", "Euro");
-        currencies.put("Coolness Coins", "Hi");
+        currencies = getCurrencies();
 
         List<String> currencyValues = new ArrayList<>(currencies.values().stream().toList());
         currencyValues.sort(String.CASE_INSENSITIVE_ORDER);
@@ -82,7 +79,7 @@ public class ConverterController {
             return;
         }
 
-        double conversionRate = 2;//getConversion(oldCurrency, newCurrencyShort);
+        double conversionRate = getConversion(oldCurrency, newCurrencyShort);
         List<Transaction> transactions = TransactionModel.getInstance().getTransactions();
         for (Transaction transaction : transactions) {
             transaction.setAmount(transaction.getAmount() * conversionRate);
