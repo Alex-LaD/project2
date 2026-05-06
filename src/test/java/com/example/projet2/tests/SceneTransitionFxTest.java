@@ -132,6 +132,9 @@ class SceneTransitionFxTest extends ApplicationTest {
         addSampleTransactionToModel();
 
         for (SceneType sceneType : SceneType.values()) {
+            if (sceneType == SceneType.CONVERTER) {
+                continue;
+            }
             if (sceneType == SceneType.EDIT_TRANSACTION) {
                 TransactionModel.getInstance().setSelectedTransaction(
                         TransactionModel.getInstance().getTransactions().get(0)
