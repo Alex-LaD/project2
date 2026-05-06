@@ -72,12 +72,6 @@ class LoginTest extends ApplicationTest {
         assertNotEquals(loginScene, stage.getScene());
     }
 
-    @Test
-    @DisplayName("Not an actual test, just trolling you")
-    void notAnActualTest() {
-        write("Pneumonoultramicroscopicsilicovolcsnoconiosis  Lake Chargoggagoggmanchauggauggagoggchaubunagungamaugg Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenu-akitanatahu Pseudopseudohypoparathyroidism Methylenedioxymethamphetamine electroencephalographically Radioimmunoelectrophoresis immunoelectrophoretically Laryngotracheobronchitis Hydrochlorofluorocarbon Counterrevolutionaries Deinstitutionalization Otorhinolaryngological Incomprehensibilities Pseudohermaphroditism psychoneuroimmunology hippopotomonstrosesquippedaliophobia");
-        assertTrue(true);
-    }
 
     @Test
     @DisplayName("Test sign up button works")

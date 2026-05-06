@@ -37,7 +37,8 @@ public class DashboardController {
     @FXML
     private void refreshDashboard() {
         int userId = getCurrentUserId();
-        String currency = TransactionModel.getInstance().getCurrentUser().getCurrency();
+        User currentUser = TransactionModel.getInstance().getCurrentUser();
+        String currency = currentUser != null ? currentUser.getCurrency() : "USD";
         List<Transaction> transactions =
                 TransactionRepository.getTransactionsByUser(userId);
         transactionCountLabel.setText("Transactions: " + transactions.size());

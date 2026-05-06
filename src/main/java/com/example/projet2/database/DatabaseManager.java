@@ -36,6 +36,7 @@ public class DatabaseManager {
                     description TEXT,
                     date TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id)
+                    FOREIGN KEY (category) REFERENCES categories(id)
                 );
                 """;
         try (Connection conn = connect();
