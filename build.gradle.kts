@@ -41,6 +41,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("org.testfx:testfx-junit5:4.0.18")
     testImplementation("org.testfx:openjfx-monocle:jdk-12.0.1+2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("org.xerial:sqlite-jdbc:3.47.1.0")
 }

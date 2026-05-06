@@ -26,5 +26,7 @@
     <Button text="Refresh" onAction="#refreshDashboard"/>
     <Button text="Add Transaction" onAction="#goToTransactionScene"/>
     <Button text="View Transactions" onAction="#goToTransactionDetail"/>
+    <Button text="Convert Currency" onAction="#goToConverterScene"/>
+    <Button text="Sign Out" onAction="#signOut"/>
 
 </VBox>

@@ -1,9 +1,18 @@
-package com.example.projet2;
+package com.example.projet2.sceneControllers;
 
+import com.example.projet2.*;
 import com.example.projet2.repository.TransactionRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class TransactionController {
 
@@ -15,6 +24,17 @@ public class TransactionController {
 
     @FXML
     private TextField descriptionField;
+
+    public Scene buildScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneFactory.class.getResource("/com/example/projet2/transaction-view.fxml"));
+            Parent root = loader.load();
+            return new Scene(root, 600, 400);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Scene(new VBox(new Label("Error loading Transaction Scene")), 600, 400);
+        }
+    }
 
     @FXML
     public void initialize() {

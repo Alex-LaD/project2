@@ -17,7 +17,8 @@ public class DatabaseManager {
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
-                    password TEXT NOT NULL
+                    password TEXT NOT NULL,
+                    currency TEXT NOT NULL
                 );
                 """;
         String createCategoriesTable = """
@@ -42,6 +43,11 @@ public class DatabaseManager {
             stmt.execute(createUsersTable);
             stmt.execute(createCategoriesTable);
             stmt.execute(createTransactionsTable);
+            try {
+                stmt.execute("ALTER TABLE users ADD currency TEXT NOT NULL DEFAULT USD");
+            } catch (SQLException e) {
+                System.out.println("column table already exists: " );
+            }
             System.out.println("Database initialized successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
