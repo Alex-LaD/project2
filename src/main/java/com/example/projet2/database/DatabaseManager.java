@@ -18,7 +18,7 @@ public class DatabaseManager {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL
-                );
+                 );
                 """;
         String createCategoriesTable = """
                 CREATE TABLE IF NOT EXISTS categories (
@@ -35,6 +35,7 @@ public class DatabaseManager {
                     description TEXT,
                     date TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id)
+                    FOREIGN KEY (category) REFERENCES categories(id)
                 );
                 """;
         try (Connection conn = connect();
